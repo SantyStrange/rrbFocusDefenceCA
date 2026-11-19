@@ -1,0 +1,1038 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>RRB CBT - DEFENCE 2026 Current Affairs</title>
+<style>
+    :root {
+        --bg-color: #121212;
+        --surface-color: #1e1e1e;
+        --primary-cyan: #D40000;
+        --primary-blue: #2979ff;
+        --text-primary: #ffffff;
+        --text-secondary: #b3b3b3;
+        --border-color: #333333;
+        
+        --color-not-visited: #9e9e9e;
+        --color-not-answered: #f44336;
+        --color-answered: #4caf50;
+        --color-marked: #9c27b0;
+    }
+    
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+    
+    /* 100dvh prevents mobile browser URL bars from hiding the bottom elements */
+    body { background-color: var(--bg-color); color: var(--text-primary); height: 100vh; height: 100dvh; overflow: hidden; display: flex; flex-direction: column; }
+    
+    /* Views */
+    .view { display: none; flex-direction: column; height: 100%; overflow: hidden; }
+    .view.active { display: flex; }
+    
+    /* Landing Page */
+    .landing-container { max-width: 800px; margin: auto; padding: 40px 20px; text-align: center; overflow-y: auto; }
+    .landing-container h1 { color: var(--primary-cyan); font-size: 2rem; margin-bottom: 20px; }
+    .instructions { background: var(--surface-color); border: 1px solid var(--border-color); border-radius: 10px; padding: 25px; text-align: left; margin-bottom: 30px; line-height: 1.6; }
+    .instructions h3 { color: var(--primary-cyan); margin-bottom: 15px; }
+    .instructions ul { margin-left: 20px; }
+    .start-btn { background: var(--primary-blue); color: #fff; border: none; padding: 15px 30px; font-size: 1.2rem; font-weight: bold; border-radius: 5px; cursor: pointer; transition: 0.2s; text-transform: uppercase; }
+    .start-btn:hover { background: #1565c0; transform: scale(1.05); }
+
+    /* Header */
+    .header { background-color: var(--surface-color); border-bottom: 2px solid var(--primary-cyan); padding: 15px 20px; display: flex; justify-content: space-between; align-items: center; flex-shrink: 0; z-index: 50; box-shadow: 0 4px 6px rgba(0,0,0,0.3); }
+    .header h1 { font-size: 1.2rem; font-weight: 600; color: var(--primary-cyan); }
+    .timer-container { font-size: 1.2rem; font-weight: bold; background: #2a2a2a; padding: 5px 15px; border-radius: 5px; border: 1px solid var(--primary-blue); }
+    
+    /* Mobile Top Bar (Toggle Palette & Submit) */
+    .mobile-top-bar { display: none; width: 100%; flex-shrink: 0; z-index: 40; border-bottom: 1px solid var(--border-color); }
+    .mobile-top-bar button { flex: 1; padding: 12px; border: none; font-weight: bold; font-size: 0.95rem; cursor: pointer; text-transform: uppercase; }
+    .btn-toggle-top { background: #2a2a2a; color: var(--primary-cyan); border-right: 1px solid var(--border-color) !important; }
+    .btn-submit-top { background: var(--color-answered); color: #fff; }
+
+    /* Main Layout */
+    .main-container { display: flex; flex: 1; overflow: hidden; position: relative; }
+    
+    /* Quiz Left Panel */
+    .quiz-left-panel { flex: 1; display: flex; flex-direction: column; overflow: hidden; }
+    
+    /* Question Scrolling Area */
+    .question-scroll-area { flex: 1; overflow-y: auto; padding: 20px; padding-bottom: 40px; }
+    .q-header { display: flex; justify-content: space-between; margin-bottom: 20px; font-weight: bold; font-size: 1.1rem; color: var(--primary-cyan); border-bottom: 1px solid var(--border-color); padding-bottom: 10px; }
+    .question-text { font-size: 1.1rem; line-height: 1.6; margin-bottom: 15px; }
+    .question-tamil { font-size: 1.1rem; line-height: 1.6; color: var(--primary-cyan); margin-bottom: 25px; }
+    
+    .options-list { display: flex; flex-direction: column; gap: 12px; }
+    .option-label { display: flex; align-items: center; padding: 12px 15px; background: #2a2a2a; border: 1px solid var(--border-color); border-radius: 8px; cursor: pointer; transition: 0.2s; }
+    .option-label:hover { border-color: var(--primary-cyan); background: #333; }
+    .option-label input { margin-right: 15px; transform: scale(1.2); accent-color: var(--primary-cyan); }
+    
+    /* Pinned Action Buttons Footer */
+    .action-buttons { flex-shrink: 0; display: flex; flex-wrap: wrap; gap: 10px; padding: 15px 20px; background: var(--surface-color); border-top: 1px solid var(--border-color); z-index: 10; box-shadow: 0 -4px 10px rgba(0,0,0,0.3); }
+    .btn { padding: 10px 15px; border: none; border-radius: 5px; font-weight: bold; cursor: pointer; transition: 0.2s; color: #fff; text-transform: uppercase; font-size: 0.85rem; display: flex; justify-content: center; align-items: center; text-align: center; }
+    .btn-prev { background: #424242; }
+    .btn-prev:hover { background: #616161; }
+    .btn-clear { background: #f44336; }
+    .btn-clear:hover { background: #d32f2f; }
+    .btn-mark { background: var(--color-marked); }
+    .btn-mark:hover { background: #7b1fa2; }
+    .btn-save { background: var(--primary-blue); margin-left: auto; }
+    .btn-save:hover { background: #1565c0; }
+
+    /* Palette Section */
+    .palette-section { width: 320px; background: var(--surface-color); border-left: 1px solid var(--border-color); display: flex; flex-direction: column; transition: transform 0.3s ease; flex-shrink: 0; }
+    .palette-header { padding: 15px; border-bottom: 1px solid var(--border-color); font-weight: bold; display: flex; justify-content: space-between; align-items: center; }
+    .palette-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 10px; padding: 15px; overflow-y: auto; }
+    .q-bubble { aspect-ratio: 1; display: flex; align-items: center; justify-content: center; border-radius: 5px; cursor: pointer; font-weight: bold; font-size: 0.9rem; color: #fff; background: var(--color-not-visited); border: 2px solid transparent; }
+    .q-bubble.active { border-color: var(--primary-cyan); transform: scale(1.1); box-shadow: 0 0 8px var(--primary-cyan); }
+    
+    .status-0 { background: var(--color-not-visited); color: #000; } 
+    .status-1 { background: var(--color-not-answered); } 
+    .status-2 { background: var(--color-answered); } 
+    .status-3 { background: var(--color-marked); } 
+    .status-4 { background: var(--color-marked); position: relative; } 
+    .status-4::after { content: ''; position: absolute; bottom: 2px; right: 2px; width: 8px; height: 8px; background: var(--color-answered); border-radius: 50%; border: 1px solid #fff; }
+
+    .legend { padding: 15px; font-size: 0.8rem; border-top: 1px solid var(--border-color); display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+    .legend-item { display: flex; align-items: center; gap: 5px; }
+    .legend-box { width: 15px; height: 15px; border-radius: 3px; }
+    .btn-submit-desktop { background: var(--color-answered); width: 100%; padding: 12px; }
+
+    /* Custom Modals (No native alerts) */
+    .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); z-index: 2000; justify-content: center; align-items: center; padding: 20px; }
+    .modal-content { background: var(--surface-color); padding: 30px; border-radius: 10px; width: 100%; max-width: 500px; border: 1px solid var(--border-color); text-align: center; box-shadow: 0 5px 15px rgba(0,0,0,0.5); }
+    .modal-content h2 { color: var(--primary-cyan); margin-bottom: 20px; }
+    .modal-actions { display: flex; justify-content: center; gap: 15px; margin-top: 25px; }
+    
+    /* Results View */
+    .results-container { max-width: 900px; margin: auto; padding: 40px 20px; text-align: center; overflow-y: auto; width: 100%; }
+    .result-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; margin: 30px 0; }
+    .stat-box { background: #2a2a2a; padding: 20px; border-radius: 8px; border-bottom: 4px solid #666; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+    .stat-box.st-score { border-color: var(--primary-cyan); grid-column: span 2; }
+    .stat-box.st-correct { border-color: var(--color-answered); }
+    .stat-box.st-wrong { border-color: var(--color-not-answered); }
+    .stat-box h3 { font-size: 2.5rem; margin-bottom: 5px; }
+    .stat-box.st-score h3 { font-size: 3.5rem; color: var(--primary-cyan); }
+    
+    /* Tabbed Review Section */
+    #detailed-review-section { display: none; margin-top: 40px; }
+    .review-tabs { display: flex; gap: 10px; margin-bottom: 20px; justify-content: center; flex-wrap: wrap; }
+    .tab-btn { background: #2a2a2a; border: 1px solid var(--border-color); color: var(--text-secondary); padding: 12px 15px; border-radius: 5px; cursor: pointer; font-weight: bold; flex: 1; min-width: 110px; text-align: center; transition: 0.2s; }
+    .tab-btn:hover { background: #333; }
+    .tab-btn.active { color: #fff; border-bottom: 3px solid; }
+    .tab-btn[data-tab="correct"].active { border-color: var(--color-answered); background: rgba(76, 175, 80, 0.1); }
+    .tab-btn[data-tab="wrong"].active { border-color: var(--color-not-answered); background: rgba(244, 67, 54, 0.1); }
+    .tab-btn[data-tab="unattempted"].active { border-color: var(--color-not-visited); background: rgba(158, 158, 158, 0.1); }
+    
+    .tab-content { display: none; text-align: left; }
+    .tab-content.active { display: block; }
+    
+    .review-item { padding: 20px; background: #2a2a2a; margin-bottom: 15px; border-radius: 8px; border-left: 5px solid var(--border-color); }
+    .review-item.correct { border-left-color: var(--color-answered); }
+    .review-item.wrong { border-left-color: var(--color-not-answered); }
+    .review-item.unattempted { border-left-color: var(--color-not-visited); }
+    
+    .answer-tag { display: inline-block; padding: 4px 8px; border-radius: 4px; font-size: 0.85rem; font-weight: bold; margin-top: 10px; }
+    .tag-correct { background: rgba(76, 175, 80, 0.2); color: #81c784; border: 1px solid #4caf50; }
+    .tag-wrong { background: rgba(244, 67, 54, 0.2); color: #e57373; border: 1px solid #f44336; }
+    .tag-unattempted { background: rgba(158, 158, 158, 0.2); color: #e0e0e0; border: 1px solid #9e9e9e; }
+    
+    .explanation-box { margin-top: 12px; padding: 12px; background: #1e1e1e; border-radius: 5px; border-left: 3px solid var(--primary-cyan); font-size: 0.95rem; line-height: 1.5; color: #ddd; }
+
+    /* MOBILE SPECIFIC OVERRIDES */
+    @media (max-width: 768px) {
+        .mobile-top-bar { display: flex; }
+        .palette-section { position: absolute; top: 0; right: 0; height: 100%; transform: translateX(100%); z-index: 100; box-shadow: -5px 0 15px rgba(0,0,0,0.5); }
+        .palette-section.open { transform: translateX(0); }
+        
+        .result-grid { grid-template-columns: 1fr; }
+        .stat-box.st-score { grid-column: span 1; }
+        
+        .action-buttons {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            padding: 10px;
+            padding-bottom: max(10px, env(safe-area-inset-bottom));
+        }
+        .btn-save { grid-column: span 2; margin-left: 0; padding: 15px; font-size: 1.1rem; order: 1; }
+        .btn-mark { order: 2; padding: 12px; }
+        .btn-clear { order: 3; padding: 12px; }
+        .btn-prev { grid-column: span 2; order: 4; padding: 12px; }
+    }
+</style>
+</head>
+<body>
+
+<!-- VIEW 1: Landing Page -->
+<div id="view-landing" class="view active">
+    <div class="landing-container">
+        <h1>RRB CBT: DEFENCE Quiz</h1>
+        <div class="instructions">
+            <h3>📝 Instructions:</h3>
+            <ul>
+                <li><strong>Total Questions:</strong> 50 (Bilingual: English & Tamil).</li>
+                <li><strong>Time Allotted:</strong> 15 Minutes.</li>
+                <li><strong>Marking Scheme:</strong> +1 mark for correct answers, <strong>-0.33 marks</strong> for incorrect answers.</li>
+                <li>Questions are shuffled automatically for every attempt.</li>
+                <li>Use the Question Palette to navigate. You can Mark questions for review.</li>
+                <li>Ensure you have a stable connection. Do not refresh the page during the exam.</li>
+            </ul>
+        </div>
+        <button class="start-btn" onclick="startQuiz()">I am ready to begin</button>
+    </div>
+</div>
+
+<!-- VIEW 2: Main Quiz -->
+<div id="view-quiz" class="view">
+    
+    <div class="header">
+        <h1>Environment CA</h1>
+        <div class="timer-container" id="timer">15:00</div>
+    </div>
+
+    <!-- Mobile Explicit Top Bar -->
+    <div class="mobile-top-bar">
+        <button class="btn-toggle-top" onclick="togglePalette()">☰ Question Palette</button>
+        <button class="btn-submit-top" onclick="showSubmitConfirm()">Submit Exam</button>
+    </div>
+
+    <div class="main-container">
+        
+        <!-- Question Panel (Scrollable content + Fixed Footer) -->
+        <div class="quiz-left-panel">
+            
+            <div class="question-scroll-area">
+                <div class="q-header">
+                    <span id="q-no">Question 1</span>
+                    <span style="color: var(--text-secondary); font-size: 0.9rem;">Negative Marks: -0.33</span>
+                </div>
+                
+                <div class="question-text" id="q-text-en">Loading...</div>
+                <div class="question-tamil" id="q-text-ta">ஏற்றுகிறது...</div>
+                
+                <div class="options-list" id="options-container"></div>
+            </div>
+            
+            <!-- Fixed Action Buttons Footer -->
+            <div class="action-buttons">
+                <button class="btn btn-save" onclick="saveAndNext()">Save & Next ►</button>
+                <button class="btn btn-mark" onclick="markAndNext()">Mark & Next</button>
+                <button class="btn btn-clear" onclick="clearResponse()">Clear</button>
+                <button class="btn btn-prev" onclick="prevQuestion()">◄ Previous</button>
+            </div>
+            
+        </div>
+        
+        <!-- Collapsible Palette -->
+        <div class="palette-section" id="palette">
+            <div class="palette-header">
+                <span>Question Palette</span>
+                <button onclick="togglePalette()" class="btn btn-prev" style="padding: 5px; display: none;" id="close-palette-btn">X</button>
+            </div>
+            <div class="palette-grid" id="palette-grid"></div>
+            <div class="legend">
+                <div class="legend-item"><div class="legend-box status-2"></div> Answered</div>
+                <div class="legend-item"><div class="legend-box status-1"></div> Not Answered</div>
+                <div class="legend-item"><div class="legend-box status-0"></div> Not Visited</div>
+                <div class="legend-item"><div class="legend-box status-3"></div> Marked</div>
+                <div class="legend-item"><div class="legend-box status-4"></div> Ans & Marked</div>
+            </div>
+            <div style="padding: 15px;">
+                <button class="btn btn-submit btn-submit-desktop" onclick="showSubmitConfirm()">SUBMIT EXAM</button>
+            </div>
+        </div>
+        
+    </div>
+</div>
+
+<!-- Custom Confirmation Modal -->
+<div class="modal-overlay" id="confirm-modal">
+    <div class="modal-content">
+        <h2>Submit Exam?</h2>
+        <p>Are you sure you want to submit? You will not be able to change your answers.</p>
+        <p id="unanswered-warning" style="color: var(--color-not-answered); margin-top: 10px; font-weight: bold; display: none;"></p>
+        <div class="modal-actions">
+            <button class="btn btn-prev" onclick="closeSubmitConfirm()">No, Go Back</button>
+            <button class="btn btn-submit" style="width: auto; margin-top: 0; padding: 10px 20px;" onclick="submitExam()">Yes, Submit</button>
+        </div>
+    </div>
+</div>
+
+<!-- VIEW 3: Results & Review -->
+<div id="view-results" class="view">
+    <div class="results-container">
+        <h1 style="color: var(--primary-cyan); font-size: 2.2rem; margin-bottom: 20px;">Exam Submitted Successfully</h1>
+        
+        <div class="result-grid">
+            <div class="stat-box st-score">
+                <div>Final Score</div>
+                <h3 id="res-score">0.00</h3>
+                <div style="color: var(--text-secondary); font-size: 0.9rem;">(Out of 50)</div>
+            </div>
+            <div class="stat-box st-correct">
+                <h3 id="res-correct">0</h3>
+                <div>Correct</div>
+            </div>
+            <div class="stat-box st-wrong">
+                <h3 id="res-wrong">0</h3>
+                <div>Incorrect</div>
+            </div>
+        </div>
+        
+        <p style="font-size: 1.1rem; color: var(--text-secondary); margin-bottom: 25px;">Unattempted Questions: <strong id="res-unattempted" style="color: #fff;">0</strong></p>
+        
+        <div style="display: flex; gap: 15px; justify-content: center; flex-wrap: wrap;" id="post-exam-actions">
+            <button class="btn btn-save" onclick="showDetailedReview()">View Detailed Review</button>
+            <button class="btn btn-prev" onclick="location.reload()">Restart Quiz</button>
+        </div>
+        
+        <!-- 3-Section Tabbed Review -->
+        <div id="detailed-review-section">
+            <h2 style="margin-bottom: 20px; border-bottom: 1px solid var(--border-color); padding-bottom: 10px;">Test Review</h2>
+            
+            <div class="review-tabs">
+                <button class="tab-btn" data-tab="correct" onclick="switchTab('correct')">Correct (<span id="tab-count-correct">0</span>)</button>
+                <button class="tab-btn" data-tab="wrong" onclick="switchTab('wrong')">Incorrect (<span id="tab-count-wrong">0</span>)</button>
+                <button class="tab-btn" data-tab="unattempted" onclick="switchTab('unattempted')">Unattempted (<span id="tab-count-unattempted">0</span>)</button>
+            </div>
+            
+            <div id="review-content-correct" class="tab-content"></div>
+            <div id="review-content-wrong" class="tab-content"></div>
+            <div id="review-content-unattempted" class="tab-content"></div>
+        </div>
+        
+    </div>
+</div>
+
+<script>
+// Base Data containing 50 questions
+const baseQuizData = [
+    // ================= 20 DIRECT MCQS (Q1 - Q20) =================
+    // 1[cite: 306]
+    {
+        qE: "What is the name of India's 3rd nuclear-powered ballistic missile submarine?",
+        qT: "இந்தியாவின் 3வது அணுசக்தியால் இயங்கும் பாலிஸ்டிக் ஏவுகணை நீர்மூழ்கிக் கப்பலின் பெயர் என்ன?",
+        oE: ["INS Virat", "INS Arighaat", "INS Aridaman", "INS Vikrant"],
+        oT: ["ஐஎன்எஸ் விராட்", "ஐஎன்எஸ் அரிகாட்", "ஐஎன்எஸ் அரிதாமன்", "ஐஎன்எஸ் விக்ராந்த்"],
+        a: 2,
+        exp: "INS Aridaman is India's 3rd nuclear-powered ballistic missile submarine developed under the Advanced Technology Vessel Project at Visakhapatnam, following INS Arihant and INS Arighaat."
+    },
+    // 2[cite: 308]
+    {
+        qE: "India's AI-powered autonomous combat aircraft 'Kaal Bhairava' will be manufactured in which country?",
+        qT: "இந்தியாவின் செயற்கை நுண்ணறிவு மூலம் இயங்கும் 'கால பைரவா' போர் விமானம் எந்த நாட்டில் தயாரிக்கப்பட உள்ளது?",
+        oE: ["Spain", "Portugal", "France", "Italy"],
+        oT: ["ஸ்பெயின்", "போர்ச்சுகல்", "பிரான்ஸ்", "இத்தாலி"],
+        a: 1,
+        exp: "Developed by Flying Wedge Defence and Aerospace, Kaal Bhairava has a 3,000 km range and will be manufactured in Portugal under Operation 777."
+    },
+    // 3[cite: 309]
+    {
+        qE: "Which country became the third foreign buyer of India's BrahMos supersonic cruise missile system?",
+        qT: "இந்தியாவின் பிரம்மோஸ் சூப்பர்சோனிக் குரூஸ் ஏவுகணை அமைப்பை வாங்கும் மூன்றாவது வெளிநாடு எது?",
+        oE: ["Malaysia", "Thailand", "Indonesia", "Singapore"],
+        oT: ["மலேசியா", "தாய்லாந்து", "இந்தோனேசியா", "சிங்கப்பூர்"],
+        a: 2,
+        exp: "Indonesia became the 3rd foreign buyer of BrahMos, following the Philippines as the 1st buyer and Vietnam as the 2nd buyer."
+    },
+    // 4[cite: 310]
+    {
+        qE: "INS Malvan belongs to which class of Indian Navy warships?",
+        qT: "ஐஎன்எஸ் மால்வன் இந்திய கடற்படையின் எந்த வகை போர்க்கப்பல்களைச் சேர்ந்தது?",
+        oE: ["Nilgiri-Class", "Visakhapatnam-Class", "Mahe-Class", "Kamorta-Class"],
+        oT: ["நீலகிரி வகுப்பு", "விசாகப்பட்டினம் வகுப்பு", "மாகே வகுப்பு", "கமோர்டா வகுப்பு"],
+        a: 2,
+        exp: "INS Malvan belongs to the Mahe-Class and is the 2nd of eight indigenous Anti-Submarine Warfare Shallow Water Crafts built by Cochin Shipyard."
+    },
+    // 5[cite: 312]
+    {
+        qE: "At which port was INS Anjadip commissioned into the Indian Navy in 2026?",
+        qT: "2026 ஆம் ஆண்டில் ஐஎன்எஸ் அஞ்சதீப் எந்தத் துறைமுகத்தில் இந்திய கடற்படையில் இணைக்கப்பட்டது?",
+        oE: ["Mumbai Port", "Kochi Port", "Visakhapatnam Port", "Chennai Port"],
+        oT: ["மும்பை துறைமுகம்", "கொச்சி துறைமுகம்", "விசாகப்பட்டினம் துறைமுகம்", "சென்னை துறைமுகம்"],
+        a: 3,
+        exp: "INS Anjadip, the 3rd vessel of the eight-ship ASW-SWC project built by GRSE Kolkata, was commissioned at Chennai Port."
+    },
+    // 6[cite: 313]
+    {
+        qE: "At which location was the Project 17A stealth frigate INS Mahendragiri commissioned?",
+        qT: "திட்டம் 17A-இன் கீழ் உருவாக்கப்பட்ட ஐஎன்எஸ் மகேந்திரகிரி போர்க்கப்பல் எந்த இடத்தில் கடற்படையில் இணைக்கப்பட்டது?",
+        oE: ["Visakhapatnam", "Mumbai", "Kochi", "Chennai"],
+        oT: ["விசாகப்பட்டினம்", "மும்பை", "கொச்சி", "சென்னை"],
+        a: 0,
+        exp: "Built by Mazagon Dock Shipbuilders Limited in Mumbai, INS Mahendragiri was commissioned into the Indian Navy at Visakhapatnam."
+    },
+    // 7[cite: 314]
+    {
+        qE: "GAGAN is jointly developed by ISRO and which organisation?",
+        qT: "ககன் அமைப்பு இஸ்ரோ மற்றும் எந்த நிறுவனத்தால் கூட்டாக உருவாக்கப்பட்டது?",
+        oE: ["Directorate General of Civil Aviation", "Airports Authority of India", "Ministry of Civil Aviation", "Hindustan Aeronautics Limited"],
+        oT: ["சிவில் விமானப் போக்குவரத்து இயக்குநரகம்", "இந்திய விமான நிலையங்கள் ஆணையம்", "சிவில் விமானப் போக்குவரத்து அமைச்சகம்", "இந்துஸ்தான் ஏரோநாட்டிக்ஸ் லிமிடெட்"],
+        a: 1,
+        exp: "GAGAN (GPS Aided GEO Augmented Navigation) is India's indigenous satellite-based navigation system jointly developed by ISRO and the Airports Authority of India."
+    },
+    // 8[cite: 315]
+    {
+        qE: "Where was the first flight test of the long-range surface-to-air 'Kusha' missile conducted?",
+        qT: "நீண்ட தூர தரையிலிருந்து வான் இலக்கைத் தாக்கும் 'குஷா' ஏவுகணையின் முதல் விமான சோதனை எங்கு நடத்தப்பட்டது?",
+        oE: ["Pokhran, Rajasthan", "Sriharikota, Andhra Pradesh", "Dr APJ Abdul Kalam Island, Odisha", "Chandipur, Odisha"],
+        oT: ["பொக்ரான், ராஜஸ்தான்", "ஸ்ரீஹரிகோட்டா, ஆந்திரப் பிரதேசம்", "டாக்டர் ஏபிஜே அப்துல் கலாம் தீவு, ஒடிசா", "சந்திப்பூர், ஒடிசா"],
+        a: 2,
+        exp: "DRDO successfully conducted the first flight test of the Kusha Long-Range Surface-to-Air Missile from Dr APJ Abdul Kalam Island, Odisha."
+    },
+    // 9[cite: 317]
+    {
+        qE: "Which country became the first international buyer of India's Astra Mk-1 missile?",
+        qT: "இந்தியாவின் அஸ்திரா எம்கே-1 ஏவுகணையை வாங்கிய முதல் வெளிநாடு எது?",
+        oE: ["Indonesia", "Vietnam", "Philippines", "Malaysia"],
+        oT: ["இந்தோனேசியா", "வியட்நாம்", "பிலிப்பைன்ஸ்", "மலேசியா"],
+        a: 0,
+        exp: "Indonesia became the first international buyer of the Astra Mk-1 Beyond-Visual-Range Air-to-Air Missile, developed by DRDO and manufactured by BDL."
+    },
+    // 10[cite: 319]
+    {
+        qE: "What is the name of India's first indigenous 300-km Universal Rocket Launching System?",
+        qT: "இந்தியாவின் முதல் உள்நாட்டு 300 கி.மீ தூரம் செல்லக்கூடிய யுனிவர்சல் ராக்கெட் ஏவுதல் அமைப்பின் பெயர் என்ன?",
+        oE: ["Pinaka", "Pralay", "BrahMos", "Suryastra"],
+        oT: ["பினாகா", "பிரளய்", "பிரம்மோஸ்", "சூர்யாஸ்த்ரா"],
+        a: 3,
+        exp: "Suryastra is India's first indigenous 300-km Universal Rocket Launching System, flagged off by Defence Minister Rajnath Singh."
+    },
+    // 11[cite: 321]
+    {
+        qE: "What is the full form of the TARA Weapon System tested by DRDO and the IAF?",
+        qT: "டிஆர்டிஓ மற்றும் இந்திய விமானப்படையால் சோதிக்கப்பட்ட TARA ஆயுத அமைப்பின் விரிவாக்கம் என்ன?",
+        oE: ["Tactical Advanced Radar Application", "Tactical Advanced Range Augmentation", "Targeted Air Range Assault", "Tactical Aerial Reconnaissance Array"],
+        oT: ["டாக்டிக்கல் அட்வான்ஸ்டு ரேடார் அப்ளிகேஷன்", "டாக்டிக்கல் அட்வான்ஸ்டு ரேஞ்ச் ஆக்மென்டேஷன்", "டார்கெட்டட் ஏர் ரேஞ்ச் அசால்ட்", "டாக்டிக்கல் ஏரியல் ரெக்கானைசன்ஸ் அரே"],
+        a: 1,
+        exp: "TARA stands for Tactical Advanced Range Augmentation, a long-range precision-guided weapon system designed to hit specific targets with high accuracy."
+    },
+    // 12[cite: 322]
+    {
+        qE: "Who took additional charge as the Chairman of DRDO in 2026?",
+        qT: "2026 ஆம் ஆண்டில் டிஆர்டிஓ தலைவராகக் கூடுதல் பொறுப்பேற்றவர் யார்?",
+        oE: ["Rajesh Kumar Singh", "Ajay Kumar", "Amitabh Kant", "T. V. Somanathan"],
+        oT: ["ராஜேஷ் குமார் சிங்", "அஜய் குமார்", "அமிதாப் காந்த்", "டி. வி. சோமநாதன்"],
+        a: 0,
+        exp: "Defence Secretary Rajesh Kumar Singh took additional charge as Chairman of DRDO in 2026."
+    },
+    // 13[cite: 325]
+    {
+        qE: "Who was appointed as India's third Chief of Defence Staff?",
+        qT: "இந்தியாவின் மூன்றாவது முப்படைத் தலைமைத் தளபதியாக நியமிக்கப்பட்டவர் யார்?",
+        oE: ["N. S. Raja Subramani", "Anil Chauhan", "Upendra Dwivedi", "K. Swaminathan"],
+        oT: ["என். எஸ். ராஜா சுப்ரமணி", "அனில் சவுகான்", "உபேந்திர திவேதி", "கே. சுவாமிநாதன்"],
+        a: 0,
+        exp: "Lt General N. S. Raja Subramani was appointed as India's 3rd Chief of Defence Staff, succeeding General Anil Chauhan."
+    },
+    // 14[cite: 326]
+    {
+        qE: "According to the SIPRI Report 2026, what was India's global rank in military spending in 2025?",
+        qT: "சிப்ரி 2026 அறிக்கையின்படி, 2025 ஆம் ஆண்டில் ராணுவச் செலவினங்களில் இந்தியாவின் உலகளாவிய தரவரிசை என்ன?",
+        oE: ["3rd", "5th", "7th", "10th"],
+        oT: ["3வது", "5வது", "7வது", "10வது"],
+        a: 1,
+        exp: "India ranked 5th globally in 2025 military expenditure, behind the United States, China, Russia, and Germany."
+    },
+    // 15[cite: 327]
+    {
+        qE: "Which port became the first in India to deploy an advanced Anti-Drone System?",
+        qT: "மேம்பட்ட ஆளில்லா விமான எதிர்ப்பு அமைப்பைப் பயன்படுத்திய இந்தியாவின் முதல் துறைமுகம் எது?",
+        oE: ["Paradip Port", "Jawaharlal Nehru Port", "V. O. Chidambaranar Port", "Kandla Port"],
+        oT: ["பாரதீப் துறைமுகம்", "ஜவஹர்லால் நேரு துறைமுகம்", "வ. உ. சிதம்பரனார் துறைமுகம்", "காண்ட்லா துறைமுகம்"],
+        a: 2,
+        exp: "V. O. Chidambaranar Port in Tamil Nadu became the first port in India to deploy an advanced Anti-Drone System."
+    },
+    // 16[cite: 328]
+    {
+        qE: "In which state has India's first private satellite manufacturing facility been established?",
+        qT: "இந்தியாவின் முதல் தனியார் செயற்கைக்கோள் உற்பத்தி ஆலை எந்த மாநிலத்தில் நிறுவப்பட்டுள்ளது?",
+        oE: ["Gujarat", "Karnataka", "Telangana", "Tamil Nadu"],
+        oT: ["குஜராத்", "கர்நாடகா", "தெலுங்கானா", "தமிழ்நாடு"],
+        a: 0,
+        exp: "India's first private satellite manufacturing facility, the Palmnaro Electro-Optical Payload Facility, was established in Sanand, Gujarat."
+    },
+    // 17[cite: 329]
+    {
+        qE: "What is the name of India's next-generation Hypersonic Glide Vehicle developed by DRDO?",
+        qT: "டிஆர்டிஓ உருவாக்கிய இந்தியாவின் அடுத்த தலைமுறை ஹைப்பர்சோனிக் கிளைடு வாகனத்தின் பெயர் என்ன?",
+        oE: ["Shaurya", "Dhvani", "Agni-V", "BrahMos-II"],
+        oT: ["சௌரியா", "த்வானி", "அக்னி-5", "பிரம்மோஸ்-2"],
+        a: 1,
+        exp: "Dhvani is a DRDO-developed Hypersonic Glide Vehicle designed to travel at speeds exceeding Mach 5."
+    },
+    // 18[cite: 332]
+    {
+        qE: "According to the SIPRI Yearbook 2026, India's estimated nuclear arsenal reached what number?",
+        qT: "சிப்ரி 2026 ஆண்டு அறிக்கையின்படி, இந்தியாவின் மதிப்பிடப்பட்ட அணு ஆயுதங்களின் எண்ணிக்கை எவ்வளவை எட்டியது?",
+        oE: ["190", "170", "180", "210"],
+        oT: ["190", "170", "180", "210"],
+        a: 0,
+        exp: "According to SIPRI Yearbook 2026, India's estimated nuclear arsenal reached 190, while Pakistan holds 170 and China holds 620."
+    },
+    // 19[cite: 333]
+    {
+        qE: "What is the name of India's first indigenous electric military vehicle developed by Pravaig Dynamics?",
+        qT: "பிரவைக் டைனமிக்ஸ் நிறுவனம் உருவாக்கிய இந்தியாவின் முதல் உள்நாட்டு ராணுவ மின்சார வாகனத்தின் பெயர் என்ன?",
+        oE: ["Atlas", "Veer", "Garuda", "Vikraant"],
+        oT: ["அட்லஸ்", "வீர்", "கருடா", "விக்ராந்த்"],
+        a: 1,
+        exp: "Veer EV is India's first indigenous electric military vehicle, developed by Bengaluru-based Pravaig Dynamics."
+    },
+    // 20[cite: 372]
+    {
+        qE: "Which company developed the 'Bhargavastra' counter-drone system?",
+        qT: "'பார்கவஸ்த்ரா' ஆளில்லா விமான எதிர்ப்பு அமைப்பை உருவாக்கிய நிறுவனம் எது?",
+        oE: ["Bharat Forge Limited", "Solar Defence and Aerospace Limited", "Tata Advanced Systems Limited", "Zen Technologies Limited"],
+        oT: ["பாரத் ஃபோர்ஜ் லிமிடெட்", "சோலார் டிஃபென்ஸ் அண்ட் ஏரோஸ்பேஸ் லிமிடெட்", "டாடா அட்வான்ஸ்டு சிஸ்டம்ஸ் லிமிடெட்", "ஜென் டெக்னாலஜிஸ் லிமிடெட்"],
+        a: 1,
+        exp: "The Bhargavastra counter-drone system was developed by Nagpur-based Solar Defence and Aerospace Limited."
+    },
+
+    // ================= 20 SIDE-POINT QUESTIONS (Q21 - Q40) =================
+    // 21[cite: 306]
+    {
+        qE: "Which two nuclear-capable submarine-launched ballistic missiles can INS Aridaman carry?",
+        qT: "ஐஎன்எஸ் அரிதாமன் நீர்மூழ்கிக் கப்பல் எந்த இரண்டு அணுசக்தி திறன் கொண்ட பாலிஸ்டிக் ஏவுகணைகளைச் சுமந்து செல்லும் திறன் கொண்டது?",
+        oE: ["K-15 and K-4", "K-15 and Agni-1", "K-4 and Pralay", "Agni-2 and K-15"],
+        oT: ["கே-15 மற்றும் கே-4", "கே-15 மற்றும் அக்னி-1", "கே-4 மற்றும் பிரளய்", "அக்னி-2 மற்றும் கே-15"],
+        a: 0,
+        exp: "INS Aridaman features 8 Vertical Launch System tubes capable of carrying K-15 missiles (700 km range) and K-4 missiles (3,500 km range)."
+    },
+    // 22[cite: 307]
+    {
+        qE: "From which fighter aircraft was the indigenous RudraM-II air-to-surface missile flight-tested?",
+        qT: "உள்நாட்டு ருத்ரம்-2 வான்-தரை ஏவுகணை எந்தப் போர் விமானத்திலிருந்து வெற்றிகரமாகச் சோதிக்கப்பட்டது?",
+        oE: ["LCA Tejas", "Rafale", "Sukhoi-30 MKI", "Mirage 2000"],
+        oT: ["எல்சிஏ தேஜாஸ்", "ரஃபேல்", "சுகோய்-30 எம்கேஐ", "மிராஜ் 2000"],
+        a: 2,
+        exp: "The indigenous RudraM-II air-to-surface missile developed by DRDO was flight-tested from a Sukhoi-30 MKI fighter jet."
+    },
+    // 23[cite: 308]
+    {
+        qE: "Under which operation will the 'Kaal Bhairava' AI combat aircraft be manufactured in Portugal?",
+        qT: "போர்ச்சுகலில் 'கால பைரவா' செயற்கை நுண்ணறிவு போர் விமானம் எந்த நடவடிக்கையின் கீழ் தயாரிக்கப்பட உள்ளது?",
+        oE: ["Operation 555", "Operation 777", "Operation 999", "Operation 333"],
+        oT: ["ஆபரேஷன் 555", "ஆபரேஷன் 777", "ஆபரேஷன் 999", "ஆபரேஷன் 333"],
+        a: 1,
+        exp: "Kaal Bhairava, developed by Flying Wedge Defence and Aerospace, will be manufactured in Portugal under Operation 777."
+    },
+    // 24[cite: 310]
+    {
+        qE: "At which naval base was INS Malvan commissioned into the Indian Navy?",
+        qT: "ஐஎன்எஸ் மால்வன் போர்க்கப்பல் எந்தக் கடற்படைத் தளத்தில் இந்திய கடற்படையில் இணைக்கப்பட்டது?",
+        oE: ["Karwar", "Kochi", "Mumbai", "Visakhapatnam"],
+        oT: ["கார்வார்", "கொச்சி", "மும்பை", "விசாகப்பட்டினம்"],
+        a: 0,
+        exp: "Built by Cochin Shipyard, INS Malvan was commissioned into the Indian Navy at Karwar, Karnataka."
+    },
+    // 25[cite: 311]
+    {
+        qE: "At which location was DRDO's ULPGM-V3 precision-guided missile successfully tested?",
+        qT: "டிஆர்டிஓ-வின் ULPGM-V3 துல்லிய வழிகாட்டுதல் ஏவுகணை எந்த இடத்தில் வெற்றிகரமாகச் சோதிக்கப்பட்டது?",
+        oE: ["Chandipur, Odisha", "Pokhran, Rajasthan", "Kurnool, Andhra Pradesh", "Chitradurga, Karnataka"],
+        oT: ["சந்திப்பூர், ஒடிசா", "பொக்ரான், ராஜஸ்தான்", "கர்னூல், ஆந்திரப் பிரதேசம்", "சித்ரதுர்கா, கர்நாடகா"],
+        a: 2,
+        exp: "The Unmanned Aerial Vehicle Launched Precision Guided Missile (ULPGM)-V3 was successfully tested by DRDO at Kurnool, Andhra Pradesh."
+    },
+    // 26[cite: 313]
+    {
+        qE: "Among the seven stealth frigates under Project 17A, which vessel remains yet to be commissioned after INS Mahendragiri?",
+        qT: "திட்டம் 17A-இன் கீழ் உள்ள ஏழு போர்க்கப்பல்களில், ஐஎன்எஸ் மகேந்திரகிரிக்குப் பிறகு இன்னும் கடற்படையில் இணைக்கப்படாத கப்பல் எது?",
+        oE: ["Taragiri", "Dunagiri", "Vindhyagiri", "Himgiri"],
+        oT: ["தாராகிரி", "துனாகிரி", "விந்தியகிரி", "ஹிம்கிரி"],
+        a: 2,
+        exp: "Under Project 17A, Nilgiri, Udaygiri, Himgiri, Taragiri, Dunagiri, and Mahendragiri have been commissioned, while Vindhyagiri is yet to be commissioned."
+    },
+    // 27[cite: 316]
+    {
+        qE: "Which Hyderabad-based firm will manufacture India's first indigenous expendable turbojet engine designed by DRDO's GTRE?",
+        qT: "டிஆர்டிஓ-வின் GTRE வடிவமைத்த இந்தியாவின் முதல் உள்நாட்டு செலவழிக்கக்கூடிய டர்போஜெட் எஞ்சினை எந்த ஹைதராபாத் நிறுவனம் தயாரிக்கும்?",
+        oE: ["Bharat Dynamics Limited", "Azad Engineering", "MTAR Technologies", "Ananth Technologies"],
+        oT: ["பாரத் டைனமிக்ஸ் லிமிடெட்", "ஆசாத் இன்ஜினியரிங்", "எம்டிஏஆர் டெக்னாலஜிஸ்", "ஆனந்த் டெக்னாலஜிஸ்"],
+        a: 1,
+        exp: "Designed by DRDO's Gas Turbine Research Establishment, the 350-kg single-mission expendable turbojet engine will be manufactured by Azad Engineering, Hyderabad."
+    },
+    // 28[cite: 319]
+    {
+        qE: "In which city of Maharashtra was the 'Suryastra' Universal Rocket Launching System flagged off at NIBE Group's Defence Manufacturing Complex?",
+        qT: "மகாராஷ்டிராவின் எந்த நகரத்தில் உள்ள NIBE குழுமத்தின் பாதுகாப்பு உற்பத்தி வளாகத்தில் 'சூர்யாஸ்த்ரா' ஏவுதல் அமைப்பு கொடியசைத்துத் தொடங்கி வைக்கப்பட்டது?",
+        oE: ["Pune", "Nagpur", "Shirdi", "Nashik"],
+        oT: ["புனே", "நாக்பூர்", "ஷீரடி", "நாசிக்"],
+        a: 2,
+        exp: "Defence Minister Rajnath Singh flagged off Suryastra at NIBE Group's Defence Manufacturing Complex in Shirdi, Maharashtra."
+    },
+    // 29[cite: 320]
+    {
+        qE: "Which Indian private company collaborated with DRDO to develop the amphibious 'Vikram VT-21' armoured fighting vehicle?",
+        qT: "நிலத்திலும் நீரிலும் செயல்படும் 'விக்ரம் விடி-21' கவச போர் வாகனத்தை டிஆர்டிஓ-வுடன் இணைந்து உருவாக்கிய இந்திய தனியார் நிறுவனம் எது?",
+        oE: ["Mahindra Defence", "Larsen and Toubro", "Bharat Forge Limited", "Tata Motors"],
+        oT: ["மஹிந்திரா டிஃபென்ஸ்", "லார்சன் அண்ட் டூப்ரோ", "பாரத் ஃபோர்ஜ் லிமிடெட்", "டாடா மோட்டார்ஸ்"],
+        a: 2,
+        exp: "Vikram VT-21, India's next-generation armoured fighting vehicle capable of operating on land and water, was jointly developed by DRDO and Bharat Forge Limited."
+    },
+    // 30[cite: 323]
+    {
+        qE: "Which specific DRDO laboratory developed the AI-powered 'Prajna' satellite intelligence system handed over to the Home Ministry?",
+        qT: "உள்துறை அமைச்சகத்திடம் ஒப்படைக்கப்பட்ட 'பிரக்ஞா' செயற்கை நுண்ணறிவு செயற்கைக்கோள் நுண்ணறிவு அமைப்பை உருவாக்கிய டிஆர்டிஓ ஆய்வகம் எது?",
+        oE: ["Defence Electronics Research Laboratory", "Centre for Artificial Intelligence and Robotics", "Research Centre Imarat", "Aeronautical Development Establishment"],
+        oT: ["பாதுகாப்பு மின்னணு ஆராய்ச்சி ஆய்வகம்", "செயற்கை நுண்ணறிவு மற்றும் ரோபாட்டிக்ஸ் மையம்", "இமாரத் ஆராய்ச்சி மையம்", "வானூர்தி மேம்பாட்டு நிறுவனம்"],
+        a: 1,
+        exp: "Prajna was developed by DRDO's Centre for Artificial Intelligence and Robotics (CAIR) to boost India's internal security."
+    },
+    // 31[cite: 326]
+    {
+        qE: "According to the SIPRI Report 2026, what was India's total military expenditure in 2025?",
+        qT: "சிப்ரி 2026 அறிக்கையின்படி, 2025 ஆம் ஆண்டில் இந்தியாவின் மொத்த ராணுவச் செலவினம் எவ்வளவு?",
+        oE: ["78.5 Billion Dollars", "83.6 Billion Dollars", "92.1 Billion Dollars", "104.2 Billion Dollars"],
+        oT: ["78.5 பில்லியன் டாலர்கள்", "83.6 பில்லியன் டாலர்கள்", "92.1 பில்லியன் டாலர்கள்", "104.2 பில்லியன் டாலர்கள்"],
+        a: 2,
+        exp: "According to the SIPRI Report 2026, India spent 92.1 Billion Dollars on defence in 2025, placing it 5th globally."
+    },
+    // 32[cite: 328]
+    {
+        qE: "Which company set up the Palmnaro Electro-Optical Payload Facility in Sanand, Gujarat?",
+        qT: "குஜராத்தின் சானந்தில் உள்ள பால்ம்னாரோ எலக்ட்ரோ-ஆப்டிகல் பேலோட் ஆலையை நிறுவிய நிறுவனம் எது?",
+        oE: ["Skyroot Aerospace", "Pixxel Space", "Azista Space Systems", "Dhruva Space"],
+        oT: ["ஸ்கைரூட் ஏரோஸ்பேஸ்", "பிக்சல் ஸ்பேஸ்", "அசிஸ்டா ஸ்பேஸ் சிஸ்டம்ஸ்", "துருவா ஸ்பேஸ்"],
+        a: 2,
+        exp: "Azista Space Systems established the Palmnaro Electro-Optical Payload Facility at Khoraj Industrial Estate, Sanand, Gujarat."
+    },
+    // 33[cite: 329]
+    {
+        qE: "What is the operational strike range of the DRDO-developed 'Dhvani' Hypersonic Glide Vehicle?",
+        qT: "டிஆர்டிஓ உருவாக்கிய 'த்வானி' ஹைப்பர்சோனிக் கிளைடு வாகனத்தின் தாக்குதல் தூரம் என்ன?",
+        oE: ["1,500 km to 3,000 km", "3,000 km to 5,000 km", "6,000 km to 10,000 km", "10,000 km to 12,000 km"],
+        oT: ["1,500 கி.மீ முதல் 3,000 கி.மீ வரை", "3,000 கி.மீ முதல் 5,000 கி.மீ வரை", "6,000 கி.மீ முதல் 10,000 கி.மீ வரை", "10,000 கி.மீ முதல் 12,000 கி.மீ வரை"],
+        a: 2,
+        exp: "The Dhvani Hypersonic Glide Vehicle is designed to travel at Mach 5+ speeds with a range of 6,000 km to 10,000 km."
+    },
+    // 34[cite: 334]
+    {
+        qE: "At what elevation is the Border Roads Organisation-built Nyoma Airbase in Ladakh situated?",
+        qT: "எல்லை சாலைகள் அமைப்பால் கட்டப்பட்ட லடாக்கின் நியோமா விமானப்படைத் தளம் எவ்வளவு உயரத்தில் அமைந்துள்ளது?",
+        oE: ["11,500 feet", "13,700 feet", "15,200 feet", "17,800 feet"],
+        oT: ["11,500 அடி", "13,700 அடி", "15,200 அடி", "17,800 அடி"],
+        a: 1,
+        exp: "Nyoma Airbase in Ladakh is located at a height of 13,700 feet near the LAC and was inaugurated by Chief of Air Staff A. P. Singh."
+    },
+    // 35[cite: 309]
+    {
+        qE: "Which country was the second foreign nation to sign a deal to purchase India's BrahMos missile system?",
+        qT: "இந்தியாவின் பிரம்மோஸ் ஏவுகணை அமைப்பை வாங்க ஒப்பந்தம் செய்த இரண்டாவது வெளிநாடு எது?",
+        oE: ["Philippines", "Vietnam", "Indonesia", "Malaysia"],
+        oT: ["பிலிப்பைன்ஸ்", "வியட்நாம்", "இந்தோனேசியா", "மலேசியா"],
+        a: 1,
+        exp: "The Philippines was the 1st country to sign a deal for BrahMos, Vietnam was the 2nd country, and Indonesia became the 3rd foreign buyer."
+    },
+    // 36[cite: 340]
+    {
+        qE: "The world's highest motorable road built by BRO at Mig La Pass (19,400 feet) surpassed the previous record held by which pass?",
+        qT: "மிக் லா கணவாயில் 19,400 அடி உயரத்தில் அமைக்கப்பட்ட உலகின் மிக உயரமான சாலை, எந்தக் கணவாயின் முந்தைய சாதனையை முறியடித்தது?",
+        oE: ["Khardung La Pass", "Zoji La Pass", "Umling La Pass", "Chang La Pass"],
+        oT: ["கர்துங் லா கணவாய்", "ஜோஜி லா கணவாய்", "உம்லிங் லா கணவாய்", "சாங் லா கணவாய்"],
+        a: 2,
+        exp: "Built by BRO in Ladakh at 19,400 feet, the road at Mig La Pass broke the previous world record held by Umling La Pass."
+    },
+    // 37[cite: 342]
+    {
+        qE: "In which city will the 40 'Make in India' Airbus C-295 military transport aircraft be manufactured by Tata and Airbus?",
+        qT: "டாடா மற்றும் ஏர்பஸ் நிறுவனங்களால் 'மேக் இன் இந்தியா' திட்டத்தின் கீழ் 40 ஏர்பஸ் சி-295 விமானங்கள் எந்த நகரத்தில் தயாரிக்கப்படும்?",
+        oE: ["Bengaluru", "Vadodara", "Hyderabad", "Nagpur"],
+        oT: ["பெங்களூரு", "வதோதரா", "ஹைதராபாத்", "நாக்பூர்"],
+        a: 1,
+        exp: "Out of the total order of 56 Airbus C-295 aircraft for the IAF, the first 16 were delivered from Spain and the remaining 40 will be built in Vadodara, Gujarat."
+    },
+    // 38[cite: 351]
+    {
+        qE: "Which command of the Indian Army conducted the 'Amogh Fury' integrated firepower exercise in the Thar Desert?",
+        qT: "தார் பாலைவனத்தில் 'அமோக் ஃப்யூரி' ஒருங்கிணைந்த துப்பாக்கிச் சூடு பயிற்சியை இந்திய ராணுவத்தின் எந்தக் கட்டளைப் பிரிவு நடத்தியது?",
+        oE: ["Northern Command", "Southern Command", "Sapta Shakti Command", "Western Command"],
+        oT: ["வடக்கு கட்டளைப் பிரிவு", "தெற்கு கட்டளைப் பிரிவு", "சப்த சக்தி கட்டளைப் பிரிவு", "மேற்கு கட்டளைப் பிரிவு"],
+        a: 2,
+        exp: "The Sapta Shakti Command conducted the Amogh Fury exercise at the Mahajan Field Firing Range in Rajasthan."
+    },
+    // 39[cite: 365]
+    {
+        qE: "Which technology does DRDO's Integrated Life Support System for LCA Tejas use to replace traditional liquid oxygen cylinders?",
+        qT: "தேஜாஸ் போர் விமானத்திற்கான டிஆர்டிஓ-வின் ஒருங்கிணைந்த உயிர் காக்கும் அமைப்பு, பாரம்பரிய திரவ ஆக்ஸிஜன் சிலிண்டர்களுக்கு மாற்றாக எந்தத் தொழில்நுட்பத்தைப் பயன்படுத்துகிறது?",
+        oE: ["Cryogenic Air Separation System", "On-Board Oxygen Generating System", "Closed-Loop Nitrogen Recovery System", "Pressurised Cabin Filtration System"],
+        oT: ["கிரையோஜெனிக் காற்று பிரிப்பு அமைப்பு", "ஆன்-போர்டு ஆக்ஸிஜன் உற்பத்தி அமைப்பு", "மூடிய-சுற்று நைட்ரஜன் மீட்பு அமைப்பு", "அழுத்தப்பட்ட அறை வடிகட்டுதல் அமைப்பு"],
+        a: 1,
+        exp: "The ILSS uses On-Board Oxygen Generating System (OBOGS) technology to generate and manage oxygen for aircrew during high-altitude flights."
+    },
+    // 40[cite: 369]
+    {
+        qE: "What was the name of the first Multi-Purpose Vessel built by Larsen & Toubro prior to 'Utkarsh'?",
+        qT: "'உத்கர்ஷ்' கப்பலுக்கு முன்பாக எல் அண்ட் டி நிறுவனத்தால் கட்டப்பட்ட முதல் பல்நோக்கு கப்பலின் பெயர் என்ன?",
+        oE: ["Samarthak", "Sankalp", "Sanjeevani", "Sagarika"],
+        oT: ["சமர்த்தக்", "சங்கல்ப்", "சஞ்சீவனி", "சாகரிகா"],
+        a: 0,
+        exp: "L&T built both vessels, launching the second Multi-Purpose Vessel 'Utkarsh' at Kattupalli, Chennai, following the first vessel named 'Samarthak'."
+    },
+
+    // ================= 10 STATEMENT-BASED QUESTIONS (Q41 - Q50) =================
+    // 41[cite: 344, 345]
+    {
+        qE: "Consider the following statements:\n1. INS Nistar, India's first indigenous diving support ship, was built by Hindustan Shipyard Limited.\n2. INS Tamal was commissioned into the Indian Navy at a shipyard in France.",
+        qT: "பின்வரும் கூற்றுகளைக் கவனியுங்கள்:\n1. இந்தியாவின் முதல் உள்நாட்டு டைவிங் ஆதரவு கப்பலான ஐஎன்எஸ் நிஸ்தார் இந்துஸ்தான் கப்பல் கட்டும் தளத்தால் கட்டப்பட்டது.\n2. ஐஎன்எஸ் தமால் போர்க்கப்பல் பிரான்ஸில் உள்ள ஒரு கப்பல் கட்டும் தளத்தில் இந்திய கடற்படையில் இணைக்கப்பட்டது.",
+        oE: ["Only 1", "Only 2", "Both 1 and 2", "Neither 1 nor 2"],
+        oT: ["1 மட்டும்", "2 மட்டும்", "1 மற்றும் 2 இரண்டும்", "1 மற்றும் 2 இரண்டும் இல்லை"],
+        a: 0,
+        exp: "Statement 1 is correct (INS Nistar was built by HSL, Visakhapatnam). Statement 2 is incorrect because INS Tamal was commissioned at the Yantar Shipyard in Kaliningrad, Russia."
+    },
+    // 42[cite: 356, 358]
+    {
+        qE: "Consider the following statements:\n1. The Geelong Treaty is a 50-year defence agreement signed between India and Australia.\n2. Operation Sindoor was launched by the Indian Armed Forces on 7 May 2025 targeting nine terror locations.",
+        qT: "பின்வரும் கூற்றுகளைக் கவனியுங்கள்:\n1. ஜீலாங் ஒப்பந்தம் என்பது இந்தியா மற்றும் ஆஸ்திரேலியா இடையே கையெழுத்தான 50 ஆண்டுகால பாதுகாப்பு ஒப்பந்தமாகும்.\n2. மே 7, 2025 அன்று இந்திய ஆயுதப் படைகளால் ஒன்பது பயங்கரவாத இடங்களைக் குறிவைத்து ஆபரேஷன் சிந்தூர் தொடங்கப்பட்டது.",
+        oE: ["Only 1", "Only 2", "Both 1 and 2", "Neither 1 nor 2"],
+        oT: ["1 மட்டும்", "2 மட்டும்", "1 மற்றும் 2 இரண்டும்", "1 மற்றும் 2 இரண்டும் இல்லை"],
+        a: 1,
+        exp: "Statement 1 is incorrect (The Geelong Treaty was signed between the UK and Australia for SSN-AUKUS submarines). Statement 2 is correct."
+    },
+    // 43[cite: 330, 346]
+    {
+        qE: "Consider the following statements:\n1. Bharat Electronics Limited signed a joint venture with France's Safran Electronics and Defence to manufacture HAMMER weapons in India.\n2. The Akashteer air defence control and reporting system was developed by Bharat Electronics Limited.",
+        qT: "பின்வரும் கூற்றுகளைக் கவனியுங்கள்:\n1. இந்தியாவில் ஹேமர் ஆயுதங்களைத் தயாரிக்க பாரத் எலக்ட்ரானிக்ஸ் லிமிடெட் பிரான்ஸின் சஃப்ரான் நிறுவனத்துடன் கூட்டு ஒப்பந்தம் செய்துள்ளது.\n2. ஆகாஷ்டீர் வான் பாதுகாப்பு கட்டுப்பாட்டு அமைப்பு பாரத் எலக்ட்ரானிக்ஸ் லிமிடெட்டால் உருவாக்கப்பட்டது.",
+        oE: ["Only 1", "Only 2", "Both 1 and 2", "Neither 1 nor 2"],
+        oT: ["1 மட்டும்", "2 மட்டும்", "1 மற்றும் 2 இரண்டும்", "1 மற்றும் 2 இரண்டும் இல்லை"],
+        a: 2,
+        exp: "Both statements are correct. BEL partnered with Safran for HAMMER guided weapons and developed the Akashteer system."
+    },
+    // 44[cite: 348, 349]
+    {
+        qE: "Consider the following statements:\n1. India opened its first overseas defence manufacturing plant in Vietnam.\n2. The Supersonic Target missile STAR was developed by Hindustan Aeronautics Limited.",
+        qT: "பின்வரும் கூற்றுகளைக் கவனியுங்கள்:\n1. இந்தியா தனது முதல் வெளிநாட்டு பாதுகாப்பு உற்பத்தி ஆலையை வியட்நாமில் திறந்துள்ளது.\n2. சூப்பர்சோனிக் டார்கெட் ஏவுகணையான ஸ்டார் இந்துஸ்தான் ஏரோநாட்டிக்ஸ் லிமிடெட்டால் உருவாக்கப்பட்டது.",
+        oE: ["Only 1", "Only 2", "Both 1 and 2", "Neither 1 nor 2"],
+        oT: ["1 மட்டும்", "2 மட்டும்", "1 மற்றும் 2 இரண்டும்", "1 மற்றும் 2 இரண்டும் இல்லை"],
+        a: 3,
+        exp: "Both statements are incorrect. India's first overseas defence plant (by TASL and DRDO) was opened in Morocco, and the STAR missile was developed by DRDO."
+    },
+    // 45[cite: 338, 339]
+    {
+        qE: "Consider the following statements:\n1. The SAKSHAM indigenous anti-drone system was launched by the Indian Army in collaboration with Bharat Electronics Limited.\n2. India became the first non-NATO nation to participate in France's Ocean Sky 2025 air combat exercise.",
+        qT: "பின்வரும் கூற்றுகளைக் கவனியுங்கள்:\n1. உள்நாட்டு ஆளில்லா விமான எதிர்ப்பு அமைப்பான சாக்‌ஷம் இந்திய ராணுவத்தால் பாரத் எலக்ட்ரானிக்ஸ் லிமிடெட் உடன் இணைந்து தொடங்கப்பட்டது.\n2. பிரான்ஸின் ஓஷன் ஸ்கை 2025 வான்வழிப் போர்ப் பயிற்சியில் பங்கேற்ற முதல் நேட்டோ அல்லாத நாடாக இந்தியா மாறியது.",
+        oE: ["Only 1", "Only 2", "Both 1 and 2", "Neither 1 nor 2"],
+        oT: ["1 மட்டும்", "2 மட்டும்", "1 மற்றும் 2 இரண்டும்", "1 மற்றும் 2 இரண்டும் இல்லை"],
+        a: 0,
+        exp: "Statement 1 is correct. Statement 2 is incorrect because Exercise Ocean Sky 2025 was hosted by the Spanish Air Force at Gando Air Base, Spain."
+    },
+    // 46[cite: 360, 361]
+    {
+        qE: "Consider the following statements:\n1. India's first indigenous electric trainer aircraft 'E-Hansa' was developed by DRDO.\n2. Under the 63,000-crore deal with France, India will buy 22 single-seater Rafale-M jets and 4 twin-seater trainer jets for the Indian Navy.",
+        qT: "பின்வரும் கூற்றுகளைக் கவனியுங்கள்:\n1. இந்தியாவின் முதல் உள்நாட்டு மின்சார பயிற்சி விமானமான இ-ஹன்சா டிஆர்டிஓ-வால் உருவாக்கப்பட்டது.\n2. பிரான்ஸுடனான 63,000 கோடி ரூபாய் ஒப்பந்தத்தின் கீழ், இந்திய கடற்படைக்காக 22 ஒற்றை இருக்கை ரஃபேல்-எம் மற்றும் 4 இரட்டை இருக்கை பயிற்சி விமானங்கள் வாங்கப்படும்.",
+        oE: ["Only 1", "Only 2", "Both 1 and 2", "Neither 1 nor 2"],
+        oT: ["1 மட்டும்", "2 மட்டும்", "1 மற்றும் 2 இரண்டும்", "1 மற்றும் 2 இரண்டும் இல்லை"],
+        a: 1,
+        exp: "Statement 1 is incorrect (E-Hansa was developed by CSIR-NAL, Bengaluru). Statement 2 is correct."
+    },
+    // 47[cite: 370, 371]
+    {
+        qE: "Consider the following statements:\n1. DRDO's HIMKAVACH multi-layer clothing system is designed to protect soldiers in temperatures from +20°C to -60°C.\n2. The SANJAY automated battlefield surveillance system was jointly developed by the Indian Army and Bharat Electronics Limited.",
+        qT: "பின்வரும் கூற்றுகளைக் கவனியுங்கள்:\n1. டிஆர்டிஓ-வின் ஹிம்கவச் பல அடுக்கு ஆடை அமைப்பு +20°C முதல் -60°C வரையிலான வெப்பநிலையில் வீரர்களைப் பாதுகாக்க வடிவமைக்கப்பட்டுள்ளது.\n2. சஞ்சய் தானியங்கி போர்க்கள கண்காணிப்பு அமைப்பு இந்திய ராணுவம் மற்றும் பாரத் எலக்ட்ரானிக்ஸ் லிமிடெட்டால் கூட்டாக உருவாக்கப்பட்டது.",
+        oE: ["Only 1", "Only 2", "Both 1 and 2", "Neither 1 nor 2"],
+        oT: ["1 மட்டும்", "2 மட்டும்", "1 மற்றும் 2 இரண்டும்", "1 மற்றும் 2 இரண்டும் இல்லை"],
+        a: 2,
+        exp: "Both statements are correct. HIMKAVACH protects personnel in extreme cold, and SANJAY monitors vast land borders using ground and aerial sensors."
+    },
+    // 48[cite: 366, 368]
+    {
+        qE: "Consider the following statements:\n1. The world's largest 10-ton vertical propellant mixer was jointly developed by DRDO and BHEL.\n2. Hindustan Aeronautics Limited renamed its upgraded Hindustan Jet Trainer 36 as 'Garuda'.",
+        qT: "பின்வரும் கூற்றுகளைக் கவனியுங்கள்:\n1. உலகின் மிகப்பெரிய 10 டன் செங்குத்து உந்துசக்தி கலவை இயந்திரம் டிஆர்டிஓ மற்றும் பிஎச்இஎல் இணைந்து உருவாக்கியதாகும்.\n2. இந்துஸ்தான் ஏரோநாட்டிக்ஸ் லிமிடெட் தனது மேம்படுத்தப்பட்ட ஹிந்துஸ்தான் ஜெட் ட்ரெய்னர் 36-க்கு 'கருடா' எனப் பெயர் மாற்றியுள்ளது.",
+        oE: ["Only 1", "Only 2", "Both 1 and 2", "Neither 1 nor 2"],
+        oT: ["1 மட்டும்", "2 மட்டும்", "1 மற்றும் 2 இரண்டும்", "1 மற்றும் 2 இரண்டும் இல்லை"],
+        a: 3,
+        exp: "Both statements are incorrect. The 10-ton vertical propellant mixer was developed by ISRO and CMTI Bengaluru, and HJT-36 was renamed 'Yashas'."
+    },
+    // 49[cite: 364, 367]
+    {
+        qE: "Consider the following statements:\n1. The second frigate vessel of Project 1135.6, named 'Tavasya', was launched at Goa Shipyard Limited.\n2. The Philippines is set to acquire the 200-million-dollar Nag Mk 2 anti-tank missile system from India.",
+        qT: "பின்வரும் கூற்றுகளைக் கவனியுங்கள்:\n1. திட்டம் 1135.6-இன் இரண்டாவது போர்க்கப்பலான 'தவஸ்யா' கோவா கப்பல் கட்டும் தளத்தில் கடலில் இறக்கப்பட்டது.\n2. இந்தியாவிலிருந்து 200 மில்லியன் டாலர் மதிப்புள்ள நாக் எம்கே 2 பீரங்கி எதிர்ப்பு ஏவுகணை அமைப்பை பிலிப்பைன்ஸ் வாங்க உள்ளது.",
+        oE: ["Only 1", "Only 2", "Both 1 and 2", "Neither 1 nor 2"],
+        oT: ["1 மட்டும்", "2 மட்டும்", "1 மற்றும் 2 இரண்டும்", "1 மற்றும் 2 இரண்டும் இல்லை"],
+        a: 0,
+        exp: "Statement 1 is correct. Statement 2 is incorrect because the Philippines is set to acquire the 200-million-dollar Akash surface-to-air missile system, not Nag Mk 2."
+    },
+    // 50[cite: 331, 357]
+    {
+        qE: "Consider the following statements:\n1. The Pinaka-4 rocket system has a strike range of 300 km.\n2. The hand-operated Sea Water Desalination System SWaDeS was developed by DRDO to convert seawater into drinking water for soldiers in remote areas.",
+        qT: "பின்வரும் கூற்றுகளைக் கவனியுங்கள்:\n1. பினாகா-4 ராக்கெட் அமைப்பு 300 கி.மீ தாக்குதல் தூரத்தைக் கொண்டுள்ளது.\n2. தொலைதூரப் பகுதிகளில் உள்ள வீரர்களுக்காக கடல் நீரைக் குடிநீராக மாற்றும் சுவதேஷ் அமைப்பு டிஆர்டிஓ-வால் உருவாக்கப்பட்டது.",
+        oE: ["Only 1", "Only 2", "Both 1 and 2", "Neither 1 nor 2"],
+        oT: ["1 மட்டும்", "2 மட்டும்", "1 மற்றும் 2 இரண்டும்", "1 மற்றும் 2 இரண்டும் இல்லை"],
+        a: 2,
+        exp: "Both statements are correct. Pinaka-3 has a 120 km range while Pinaka-4 has a 300 km range, and SWaDeS was developed by DRDO."
+    }
+];
+let quizData = [];
+let currentQ = 0;
+let answers = [];
+let status = []; // 0: Not Visited, 1: Not Answered, 2: Answered, 3: Marked, 4: Answered & Marked
+
+// Shuffle array algorithm
+function shuffleArray(array) {
+    let shuffled = array.slice();
+    for (let i = shuffled.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+    }
+    return shuffled;
+}
+
+// Switch Views
+function switchView(viewId) {
+    document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+    document.getElementById(viewId).classList.add('active');
+}
+
+function startQuiz() {
+    quizData = shuffleArray(baseQuizData);
+    answers = new Array(50).fill(null);
+    status = new Array(50).fill(0);
+    
+    switchView('view-quiz');
+    
+    buildPalette();
+    loadQuestion(0);
+    startTimer();
+    
+    if(window.innerWidth <= 768) {
+        document.getElementById('close-palette-btn').style.display = 'block';
+    }
+}
+
+function buildPalette() {
+    const grid = document.getElementById('palette-grid');
+    grid.innerHTML = '';
+    for(let i=0; i<50; i++) {
+        let bubble = document.createElement('div');
+        bubble.className = 'q-bubble status-' + status[i];
+        bubble.innerText = (i+1);
+        bubble.id = 'pb-' + i;
+        bubble.onclick = () => jumpToQuestion(i);
+        grid.appendChild(bubble);
+    }
+}
+
+function syncAnswer() {
+    let selected = document.querySelector('input[name="opt"]:checked');
+    if(selected) {
+        answers[currentQ] = parseInt(selected.value);
+    } else {
+        answers[currentQ] = null;
+    }
+}
+
+function updatePaletteCSS() {
+    for(let i=0; i<50; i++) {
+        let bubble = document.getElementById('pb-' + i);
+        bubble.className = 'q-bubble status-' + status[i];
+        if(i === currentQ) bubble.classList.add('active');
+    }
+}
+
+function loadQuestion(index) {
+    if(status[currentQ] === 0) {
+        status[currentQ] = (answers[currentQ] !== null) ? 2 : 1;
+    }
+    
+    currentQ = index;
+    if(status[currentQ] === 0) status[currentQ] = 1;
+
+    document.getElementById('q-no').innerText = "Question " + (currentQ + 1);
+    
+    // Format statement questions with line breaks
+    let qTextEn = quizData[currentQ].qE.replace(/\n/g, "<br>");
+    let qTextTa = quizData[currentQ].qT.replace(/\n/g, "<br>");
+    
+    document.getElementById('q-text-en').innerHTML = qTextEn;
+    document.getElementById('q-text-ta').innerHTML = qTextTa;
+
+    let optHtml = '';
+    for(let i=0; i<4; i++) {
+        let checked = (answers[currentQ] === i) ? 'checked' : '';
+        optHtml += `
+            <label class="option-label">
+                <input type="radio" name="opt" value="${i}" ${checked} onchange="syncAnswer()">
+                <div>
+                    <div>${quizData[currentQ].oE[i]}</div>
+                    <div style="color: var(--text-secondary); font-size: 0.9rem; margin-top: 4px;">${quizData[currentQ].oT[i]}</div>
+                </div>
+            </label>
+        `;
+    }
+    document.getElementById('options-container').innerHTML = optHtml;
+    
+    // Clear scroll position to top of container when moving to a new question
+    document.querySelector('.question-scroll-area').scrollTop = 0;
+    
+    updatePaletteCSS();
+}
+
+function jumpToQuestion(i) {
+    syncAnswer();
+    loadQuestion(i);
+    if(window.innerWidth <= 768) togglePalette();
+}
+
+function saveAndNext() {
+    syncAnswer();
+    status[currentQ] = (answers[currentQ] !== null) ? 2 : 1;
+    if(currentQ < 49) loadQuestion(currentQ + 1);
+    else updatePaletteCSS();
+}
+
+function markAndNext() {
+    syncAnswer();
+    status[currentQ] = (answers[currentQ] !== null) ? 4 : 3;
+    if(currentQ < 49) loadQuestion(currentQ + 1);
+    else updatePaletteCSS();
+}
+
+function clearResponse() {
+    answers[currentQ] = null;
+    status[currentQ] = 1;
+    loadQuestion(currentQ);
+}
+
+function prevQuestion() {
+    syncAnswer();
+    if(currentQ > 0) loadQuestion(currentQ - 1);
+}
+
+function togglePalette() {
+    document.getElementById('palette').classList.toggle('open');
+}
+
+// Timer Logic
+let timeLimit = 15 * 60; // 15 mins
+let timerInterval;
+
+function startTimer() {
+    timerInterval = setInterval(() => {
+        timeLimit--;
+        let m = Math.floor(timeLimit / 60).toString().padStart(2, '0');
+        let s = (timeLimit % 60).toString().padStart(2, '0');
+        document.getElementById('timer').innerText = m + ':' + s;
+        if(timeLimit <= 0) {
+            clearInterval(timerInterval);
+            submitExam();
+        }
+    }, 1000);
+}
+
+// Custom Submit Modals
+function showSubmitConfirm() {
+    syncAnswer();
+    let unattempted = answers.filter(a => a === null).length;
+    let warningTxt = document.getElementById('unanswered-warning');
+    if(unattempted > 0) {
+        warningTxt.innerText = `You have ${unattempted} unattempted questions!`;
+        warningTxt.style.display = 'block';
+    } else {
+        warningTxt.style.display = 'none';
+    }
+    document.getElementById('confirm-modal').style.display = 'flex';
+}
+
+function closeSubmitConfirm() {
+    document.getElementById('confirm-modal').style.display = 'none';
+}
+
+function submitExam() {
+    clearInterval(timerInterval);
+    document.getElementById('confirm-modal').style.display = 'none';
+    syncAnswer();
+    
+    let correct = 0, wrong = 0, unattempted = 0;
+    
+    quizData.forEach((q, i) => {
+        if(answers[i] === null) unattempted++;
+        else if(answers[i] === q.a) correct++;
+        else wrong++;
+    });
+    
+    let score = correct - (wrong * 0.3333);
+    
+    document.getElementById('res-score').innerText = score.toFixed(2);
+    document.getElementById('res-correct').innerText = correct;
+    document.getElementById('res-wrong').innerText = wrong;
+    document.getElementById('res-unattempted').innerText = unattempted;
+    
+    switchView('view-results');
+}
+
+// Detailed Review with Tabs
+function showDetailedReview() {
+    let htmlCorrect = '';
+    let htmlWrong = '';
+    let htmlUnattempted = '';
+    
+    quizData.forEach((q, i) => {
+        let isAttempted = answers[i] !== null;
+        let isCorrect = isAttempted && answers[i] === q.a;
+        let cssClass = !isAttempted ? 'unattempted' : (isCorrect ? 'correct' : 'wrong');
+        
+        let chosenText = isAttempted ? q.oE[answers[i]] : "None";
+        let correctText = q.oE[q.a];
+        
+        let qText = q.qE.replace(/\n/g, "<br>");
+        let tagHtml = !isAttempted ? `<span class="answer-tag tag-unattempted">Unattempted</span>` : 
+                      isCorrect ? `<span class="answer-tag tag-correct">Correct (+1.0)</span>` : 
+                      `<span class="answer-tag tag-wrong">Incorrect (-0.33)</span>`;
+                      
+        let explanationText = q.exp || `The correct answer is ${correctText}.`;
+        
+        let itemHtml = `
+            <div class="review-item ${cssClass}">
+                <strong style="font-size: 1.1rem; color: #fff;">Q${i+1}: ${qText}</strong><br>
+                ${tagHtml}
+                <div style="margin-top: 15px; font-size: 0.95rem; display: grid; gap: 8px;">
+                    <div><span style="color: var(--text-secondary)">Your Answer:</span> <span style="color: ${!isAttempted ? '#9e9e9e' : isCorrect ? 'var(--color-answered)' : 'var(--color-not-answered)'}">${chosenText}</span></div>
+                    <div><span style="color: var(--text-secondary)">Correct Answer:</span> <span style="color: var(--color-answered); font-weight: bold;">${correctText}</span></div>
+                </div>
+                <div class="explanation-box">
+                    <strong style="color: var(--primary-cyan);">Explanation:</strong><br>
+                    ${explanationText}
+                </div>
+            </div>
+        `;
+        
+        if (!isAttempted) htmlUnattempted += itemHtml;
+        else if (isCorrect) htmlCorrect += itemHtml;
+        else htmlWrong += itemHtml;
+    });
+    
+    // Inject Content
+    document.getElementById('review-content-correct').innerHTML = htmlCorrect || "<div style='text-align:center; padding: 30px; color: var(--text-secondary);'>No correct answers recorded in this session.</div>";
+    document.getElementById('review-content-wrong').innerHTML = htmlWrong || "<div style='text-align:center; padding: 30px; color: var(--color-answered); font-weight: bold;'>Amazing job! You had no incorrect answers!</div>";
+    document.getElementById('review-content-unattempted').innerHTML = htmlUnattempted || "<div style='text-align:center; padding: 30px; color: var(--text-secondary);'>You attempted every single question. Great effort!</div>";
+    
+    // Setup Tab counts
+    document.getElementById('tab-count-correct').innerText = document.getElementById('res-correct').innerText;
+    document.getElementById('tab-count-wrong').innerText = document.getElementById('res-wrong').innerText;
+    document.getElementById('tab-count-unattempted').innerText = document.getElementById('res-unattempted').innerText;
+    
+    // Display Section
+    document.getElementById('post-exam-actions').style.display = 'none';
+    document.getElementById('detailed-review-section').style.display = 'block';
+    
+    // Default to the first tab that has data
+    if (htmlWrong) switchTab('wrong');
+    else if (htmlCorrect) switchTab('correct');
+    else switchTab('unattempted');
+}
+
+function switchTab(tabId) {
+    // Reset buttons and content visibility
+    document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+    document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
+    
+    // Activate chosen tab
+    document.querySelector(`.tab-btn[data-tab="${tabId}"]`).classList.add('active');
+    document.getElementById(`review-content-${tabId}`).classList.add('active');
+}
+</script>
+</body>
+</html>
+
+```
